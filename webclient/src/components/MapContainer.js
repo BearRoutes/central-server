@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dot from './Dot';
 
 const mapWidthInPixels = 1791;
-const mapHeightInPixels = 1484;
+const mapHeightInPixels = 984;
 
 class Container extends Component {
   constructor(props) {
