@@ -129,7 +129,7 @@ def trilaterate(sensor_positions, device_distances):
 # vertex candidates: array of vertex classes with their coordinates
 # vertex candidates and sensor targets should refer to the same thing for a sensor group
 def determine_node(device_position, vertex_candidates):
-    shortest_distance = 10000
+    shortest_distance = 100000
     correct_vertex = ""
     for vertex_name, coordinate in vertex_candidates.items():
         manhattan_distance = abs(device_position[0]*100-coordinate[0]*100) + abs(device_position[1]*100-coordinate[1]*100)
