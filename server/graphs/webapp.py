@@ -1,6 +1,7 @@
 '''
 Sources: https://pynative.com/python-get-time-difference/
         https://pypi.org/project/portalocker/
+        https://medium.com/@julianofischer/simplifying-python-context-management-with-exitstack-c604ae008278
 '''
 
 from device_locator import *
@@ -12,6 +13,7 @@ from nref_floor2_graph import NREFFloor2Graph
 from datetime import datetime, timedelta
 import time
 import portalocker # pip install portalocker
+from contextlib import ExitStack
 
 
 ''' TO BUILD HEAT MAP
@@ -73,6 +75,9 @@ async def get_data_from_db(start_timestamp, end_timestamp):
 
 
 sensor_data = {}
+data_0 = {}
+data_1 = {}
+data_2 = {}
 hour_counter = timedelta(seconds=0).total_seconds()  # Used for clearing BLEBeR data after an hour
 
 def get_data_from_txt():
@@ -92,11 +97,15 @@ def get_data_from_txt():
                 continue
 
             line_array = line.strip().split(",")
-            # print(f"line array: {line_array}")
-            sensor_id = line_array[0]
-            device_addr = line_array[1]
-            rssi = line_array[2]
-            date_str = line_array[3]
+            try:
+                # print(f"line array: {line_array}")
+                sensor_id = line_array[0].strip()
+                device_addr = line_array[1].strip()
+                rssi = line_array[2].strip()
+                date_str = line_array[3].strip()
+            except IndexError:
+                continue
+
             
             # Convert the string to a datetime object
             date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S.%f")
@@ -111,7 +120,7 @@ def get_data_from_txt():
             prev_date_obj = date_obj
 
             total_time += delta.total_seconds()
-            if total_time >= 3:
+            if total_time >= 10:
                 print(total_time)
                 hour_counter += total_time
                 return
@@ -157,9 +166,10 @@ while True:
     # Since we are only working with three sensors, we will only process one sensor group
     # TODO: There should be a for loop to process data for all sensor groups in sensor_groups dictionary
     '''
-    data_processing = DataProcessing(['sensor0','sensor1','sensor2'], sensor_groups[tuple(['sensor0','sensor1','sensor2'])])
-    data_processing = DataProcessing(['sensor3','sensor4','sensor5'], sensor_groups[tuple(['sensor3','sensor4','sensor5'])])
-
+    # data_processing = DataProcessing(['sensor_0','sensor_1','sensor_2'], sensor_groups[tuple(['sensor_0','sensor_1','sensor_2'])])
+    # data_processing = DataProcessing(['sensor_3','sensor_4','sensor_5'], sensor_groups[tuple(['sensor_3','sensor_4','sensor_5'])])
+    data_processing = DataProcessing(['sensor_23','sensor_0','sensor_22'], sensor_groups[tuple(['sensor_23','sensor_0','sensor_22'])])
+    data_processing = DataProcessing(['sensor_6','sensor_7','sensor_8'], sensor_groups[tuple(['sensor_6','sensor_7','sensor_8'])])
 
 
     '''
@@ -167,14 +177,22 @@ while True:
 
     TODO: Send graph to FastAPI endpoint for the web app front end
     '''
-    print(f"HEAT 2-117: {NREFFloor2Graph.vertices['2-117'].heat_level}")
-    print(f"HEAT 2-118: {NREFFloor2Graph.vertices['2-118'].heat_level}")
-    print(f"HEAT 2-127: {NREFFloor2Graph.vertices['2-127'].heat_level}")
-    print(f"HEAT AST-8: {NREFFloor2Graph.vertices['AST-8'].heat_level}")
-    print(f"HEAT ELV-179: {NREFFloor2Graph.vertices['ELV-179'].heat_level}")
-    print(f"HEAT 2-002ZZ: {NREFFloor2Graph.vertices['2-002ZZ'].heat_level}")
-    print(f"HEAT STR-1: {NREFFloor2Graph.vertices['STR-1'].heat_level}")
-    print(f"HEAT 2-132: {NREFFloor2Graph.vertices['2-132'].heat_level}")
+    # print(f"HEAT 2-117: {NREFFloor2Graph.vertices['2-117'].heat_level}")
+    # print(f"HEAT 2-118: {NREFFloor2Graph.vertices['2-118'].heat_level}")
+    # print(f"HEAT 2-127: {NREFFloor2Graph.vertices['2-127'].heat_level}")
+    # print(f"HEAT AST-8: {NREFFloor2Graph.vertices['AST-8'].heat_level}")
+    # print(f"HEAT ELV-179: {NREFFloor2Graph.vertices['ELV-179'].heat_level}")
+    # print(f"HEAT 2-002ZZ: {NREFFloor2Graph.vertices['2-002ZZ'].heat_level}")
+    # print(f"HEAT STR-1: {NREFFloor2Graph.vertices['STR-1'].heat_level}")
+    # print(f"HEAT 2-132: {NREFFloor2Graph.vertices['2-132'].heat_level}")
+    print(f"HEAT Pedway: {NREFFloor2Graph.vertices['Pedway'].heat_level}")
+    print(f"HEAT 2-001ZZA: {NREFFloor2Graph.vertices['2-001ZZA'].heat_level}")
+    print(f"HEAT 2-001: {NREFFloor2Graph.vertices['2-001'].heat_level}")
+    print(f"HEAT 2-001ZZB: {NREFFloor2Graph.vertices['2-001ZZB'].heat_level}")
+    print(f"HEAT 2-001ZZC: {NREFFloor2Graph.vertices['2-001ZZC'].heat_level}")
+    print(f"HEAT 2-003: {NREFFloor2Graph.vertices['2-003'].heat_level}")
+    print(f"HEAT STR-5: {NREFFloor2Graph.vertices['STR-5'].heat_level}")
+    print(f"HEAT 2-060A: {NREFFloor2Graph.vertices['2-060A'].heat_level}")
 
 
 

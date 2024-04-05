@@ -80,4 +80,3 @@ NREFFloor2Graph.add_edge('2-002','AST-2-132')
 #     print(vertex.neighbours)
 # for edges in NREFFloor2Graph.get_edges():
 #     print(edges)
-

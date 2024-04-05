@@ -74,10 +74,8 @@ class Graph:
     def get_edges(self):
         return [edge.vertices for edge in self.edges]
 
-    # # Find the closest vertex
-    # def link_to_vertex(device_location):
-    #     for vertex
-    #     device_location[0], device_location[1]
+    def list_graph(graph):
+        pass
 
 
     def __iter__(self):
