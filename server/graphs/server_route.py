@@ -2,7 +2,9 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from nref_floor2_graph import NREFFloor2Graph
 
+# pip install fastapi uvicorn
 # python -m uvicorn server_route:app
+# http://localhost:8000/route?start=2-118&end=2-001
 app = FastAPI()
 
 @app.get("/route")
