@@ -45,15 +45,15 @@ class Container extends Component {
         const text = e.target.result;
         const lines = text.split('\n');
         const newDots = lines.map((line) => {
-          const [xStr, yStr, color] = line.split(',');
+          const [nameStr, xStr, yStr, color] = line.split(',');
 
-          const x = parseFloat(xStr)*10.91;
-          const y = parseFloat(yStr)*20.24;
-          
-          
-          console.log(x, y)
+          const x = parseFloat(xStr)*20.2;
+          const y = parseFloat(yStr)*20.2;
+          const name = nameStr;
+                  
+          console.log(name, x, y)
           if (!isNaN(x) && !isNaN(y)) {
-            return { x, y: mapHeightInPixels - y, color: color || 'red' }; // Default to red if color is not specified
+            return { name, x, y: mapHeightInPixels - y, color: color || 'red' }; // Default to red if color is not specified
           } else {
             console.error('Invalid format in line:', line);
             return null;
@@ -77,10 +77,12 @@ class Container extends Component {
         <input type="file" onChange={this.handleFileSelect} />
         <button onClick={this.handleFileRead}>Add Dots</button>
         <div className="floor-map-container" style={{ width: `${mapWidthInPixels}px`, height: `${mapHeightInPixels}px`, position: 'relative' }}>
-          <Dot x={100} y={100} color="red" />
-          {this.state.dots.map((dot, index) => (
-            <Dot key={index} x={dot.x} y={dot.y} color={dot.color} />
-          ))}
+          <div className="dot-container" style={{width: '100%', height: '100%', position: 'absolute', left: '-397.5px', bottom: '-155px'}}>
+            
+            {this.state.dots.map((dot, index) => (
+              <Dot key={index} name={dot.name} x={dot.x} y={dot.y} color={dot.color} />
+            ))}
+          </div>
         </div>
       </div>
     );

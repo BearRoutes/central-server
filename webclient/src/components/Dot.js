@@ -3,11 +3,12 @@ import React from 'react';
 const scale = 1791 / 10; // Pixels per Meter
 const mapHeightInPixels = 1484; // Height of the map in pixels
 
-const Dot = ({ x, y, color }) => {
+const Dot = ({ name, x, y, color }) => {
 
   // console.log(x, y);
   // const x_px = x * scale;
   // const y_px = mapHeightInPixels - (y * scale);
+  const node_name = name;
   
   const size = 15; // Size of the dot in pixels
   const dotStyle = {
