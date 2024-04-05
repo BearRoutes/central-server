@@ -12,23 +12,23 @@ with open('sensorpositions.txt', 'r') as file:
     
 # SENSOR GROUPS
 sensor_groups = {
-    tuple(['sensor0','sensor1','sensor2']):['2-118','2-117'],
-    tuple(['sensor2','sensor3','sensor4']):['2-125'],
-    tuple(['sensor3','sensor4','sensor5']):['2-127','2-132','AST-8','ELV-179','2-002ZZ','STR-1'],
-    tuple(['sensor4','sensor5','sensor13']):['AST-2-132','2-002','2-011'],
-    tuple(['sensor14','sensor13','sensor15']):['STR-6','2-005ZZB','ELV-18X'],
-    tuple(['sensor15','sensor14','sensor23']):['2-090','2-005ZZA','2-060C','2-060B'],
-    tuple(['sensor23','sensor0','sensor22']):['STR-5','2-060A'],
-    tuple(['sensor23','sensor21','sensor22']):['2-052'],
-    tuple(['sensor21','sensor20','sensor19']):['2-043','2-050','STR-4'],
-    tuple(['sensor20','sensor19','sensor18']):['2-048','2-047','2-042'],
-    tuple(['sensor16','sensor17','sensor18']):['2-039','2-038','2-037'],
-    tuple(['sensor16','sensor17','sensor15']):['2-054'],
-    tuple(['sensor13','sensor5','sensor12']):['STR-2'],
-    tuple(['sensor6','sensor7','sensor8']):['Pedway','2-001ZZA','2-001','2-001ZZB','2-001ZZC','2-003'],
-    tuple(['sensor8','sensor12','sensor9']):['2-001ZZD'],
-    tuple(['sensor10','sensor12','sensor9']):['2-010','2-016'],
-    tuple(['sensor9','sensor10','sensor11']):['2-020','STR-3']
+    tuple(['sensor_0','sensor_1','sensor_2']):['2-118','2-117'],
+    tuple(['sensor_2','sensor_3','sensor_4']):['2-125'],
+    tuple(['sensor_3','sensor_4','sensor_5']):['2-127','2-132','AST-8','ELV-179','2-002ZZ','STR-1'],
+    tuple(['sensor_4','sensor_5','sensor_13']):['AST-2-132','2-002','2-011'],
+    tuple(['sensor_14','sensor_13','sensor_15']):['STR-6','2-005ZZB','ELV-18X'],
+    tuple(['sensor_15','sensor_14','sensor_23']):['2-090','2-005ZZA','2-060C','2-060B'],
+    tuple(['sensor_23','sensor_0','sensor_22']):['STR-5','2-060A'],
+    tuple(['sensor_23','sensor_21','sensor_22']):['2-052'],
+    tuple(['sensor_21','sensor_20','sensor_19']):['2-043','2-050','STR-4'],
+    tuple(['sensor_20','sensor_19','sensor_18']):['2-048','2-047','2-042'],
+    tuple(['sensor_16','sensor_17','sensor_18']):['2-039','2-038','2-037'],
+    tuple(['sensor_16','sensor_17','sensor_15']):['2-054'],
+    tuple(['sensor_13','sensor_5','sensor_12']):['STR-2'],
+    tuple(['sensor_6','sensor_7','sensor_8']):['Pedway','2-001ZZA','2-001','2-001ZZB','2-001ZZC','2-003'],
+    tuple(['sensor_8','sensor_12','sensor_9']):['2-001ZZD'],
+    tuple(['sensor_10','sensor_12','sensor_9']):['2-010','2-016'],
+    tuple(['sensor_9','sensor_10','sensor_11']):['2-020','STR-3']
 }
 
 class DataProcessing:
@@ -77,6 +77,6 @@ class DataProcessing:
     def process_heat(self):
         for device, position in self.common_devices_position.items():
             correct_node = determine_node(position, self.node_coordinates)
-            print("correct node:" + correct_node)
+            # print("correct node:" + correct_node)
             self.graph.vertices[correct_node].increase_heat()
 
