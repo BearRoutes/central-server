@@ -77,6 +77,6 @@ class DataProcessing:
     def process_heat(self):
         for device, position in self.common_devices_position.items():
             correct_node = determine_node(position, self.node_coordinates)
-            # print("correct node:" + correct_node)
+            print("correct node:" + correct_node)
             self.graph.vertices[correct_node].increase_heat()
 
