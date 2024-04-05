@@ -9,20 +9,6 @@ app = FastAPI()
 # Database connection pool
 pool = None
 
-async def clear_database():
-    async with pool.acquire() as connection:
-        await connection.execute("DELETE FROM device_data")
-
-async def connect_to_db():
-    global pool
-    pool = await asyncpg.create_pool(
-        user='postgres',
-        password='BIWiMYaXzIvwsLfmtHhrhJITehjpcCBv',
-        database='railway',
-        host='viaduct.proxy.rlwy.net',
-        port='37675'
-    )
-
 async def tcp_server():
     server = await asyncio.start_server(handle_client, '0.0.0.0', 50001)
 
@@ -47,21 +33,38 @@ async def handle_client(reader, writer, table_name):
         if not data:
             break
         
-        message = data.decode().strip()
-        print(f"Received {message} from {addr}")
+        try:
+            message = data.decode().strip()
+        except:
+            continue
 
         message_array = message.split()
-
-        if len(message_array > 10):
-            bleber_id = message_array[2] # Not needed anymore if correct bleber is populating correct port
+        # print(message)
+        if len(message_array) > 12:
+            bleber_id = message_array[1]
             device_id = message_array[9]
-            radius = message_array[11][:-1]
+            radius = message_array[12][:-1]
             now = str(datetime.now())
+
+            sensor_id = ""
+            if bleber_id == "1":
+                sensor_id = "sensor_0"
+            elif bleber_id == "2":
+                sensor_id = "sensor_22"
+            elif bleber_id == "3":
+                sensor_id = "sensor_23"
+
+            # if bleber_id == "1":
+            #     sensor_id = "sensor_6"
+            # elif bleber_id == "2":
+            #     sensor_id == "sensor_7"
+            # elif bleber_id == "3":
+            #     sensor_id == "sensor_8"
             
-            print(message_array)
-            # Insert data into PostgreSQL database
-            async with pool.acquire() as connection:
-                await connection.execute(f"INSERT INTO {table_name} (device_id, radius, time) VALUES ($1, $2, $3)", device_id, radius, now)
+            filename = f"bluetooth_data.txt"
+            with open(filename, "a") as file:
+                file.write(f"{sensor_id}, {device_id}, {radius}, {now}\n")
+            print(f"{sensor_id}, {device_id}, {radius}, {now}")
         
         # Echo back to the client
         writer.write(data)
@@ -72,18 +75,16 @@ async def handle_client(reader, writer, table_name):
 
 @app.on_event("startup")
 async def startup_event():
-    await connect_to_db()
-    await clear_database()
 
     # Start separate threads for each socket
 
-    # Used for nrfdevID: 0
+    # Used for nrfdevID: 1
     threading.Thread(target=start_tcp_server, args=(handle_client_1, '0.0.0.0', 50001)).start()
 
-    # Used for nrfdevID: 1
+    # Used for nrfdevID: 2
     threading.Thread(target=start_tcp_server, args=(handle_client_2, '0.0.0.0', 50002)).start()
 
-    # Used for nfrfdevID: 2
+    # Used for nfrfdevID: 3
     threading.Thread(target=start_tcp_server, args=(handle_client_3, '0.0.0.0', 50003)).start()
 
 def start_tcp_server(handle_client_func, host, port):

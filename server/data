@@ -1,0 +1,14 @@
+Received nrfdevID: 2,  ID: 6 device name (Unknown)  address: 46:B7:0C:34:48:E3 (random) (RSSI -44) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '6', 'device', 'name', '(Unknown)', 'address:', '46:B7:0C:34:48:E3', '(random)', '(RSSI', '-44)']
+Received nrfdevID: 2,  ID: 6 device name (Unknown)  address: 29:45:EA:B5:FA:29 (random) (RSSI -83) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '6', 'device', 'name', '(Unknown)', 'address:', '29:45:EA:B5:FA:29', '(random)', '(RSSI', '-83)']
+Received nrfdevID: 2,  ID: 76 device name (Apple)  address: FF:B1:C6:A9:24:0F (random) (RSSI -75) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '76', 'device', 'name', '(Apple)', 'address:', 'FF:B1:C6:A9:24:0F', '(random)', '(RSSI', '-75)']
+Received nrfdevID: 2,  ID: 6 device name (Unknown)  address: 01:30:05:12:14:9A (random) (RSSI -87) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '6', 'device', 'name', '(Unknown)', 'address:', '01:30:05:12:14:9A', '(random)', '(RSSI', '-87)']
+Received nrfdevID: 2,  ID: 76 device name (Apple)  address: FF:57:59:79:18:EB (random) (RSSI -71) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '76', 'device', 'name', '(Apple)', 'address:', 'FF:57:59:79:18:EB', '(random)', '(RSSI', '-71)']
+Received nrfdevID: 2,  ID: 6 device name (Unknown)  address: 11:E6:60:C8:2F:49 (random) (RSSI -83) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '6', 'device', 'name', '(Unknown)', 'address:', '11:E6:60:C8:2F:49', '(random)', '(RSSI', '-83)']
+Received nrfdevID: 2,  ID: 6 device name (Unknown)  address: 19:E7:CD:39:45:30 (random) (RSSI -86) from ('172.20.10.14', 51464)
+['nrfdevID:', '2,', 'ID:', '6', 'device', 'name', '(Unknown)', 'address:', '19:E7:CD:39:45:30', '(random)', '(RSSI', '-86)']

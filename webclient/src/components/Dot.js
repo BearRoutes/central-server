@@ -3,32 +3,26 @@ import React from 'react';
 const scale = 1791 / 10; // Pixels per Meter
 const mapHeightInPixels = 1484; // Height of the map in pixels
 
-const Dot = ({ x, y, zoom, color }) => {
+const Dot = ({ name, x, y, color }) => {
 
-  console.log(x, y);
-  const x_px = x * scale;
-  const y_px = mapHeightInPixels - (y * scale);
-
-  // Adjust dot size based on the zoom level. You can change the calculation as needed.
-  // For example, this makes the dot's size double as the zoom level goes from 1 to 2, and so on.
-  const baseSize = 20; // Base size of the dot without zoom
-  const size = baseSize * zoom; // Adjust dot size based on zoom
-  console.log(x_px, y_px);
-
+  // console.log(x, y);
+  // const x_px = x * scale;
+  // const y_px = mapHeightInPixels - (y * scale);
+  const node_name = name;
+  
+  const size = 15; // Size of the dot in pixels
   const dotStyle = {
     position: 'absolute',
+    left: `${x}px`,
+    top: `${y}px`,
     width: `${size}px`,
     height: `${size}px`,
     backgroundColor: color,
     borderRadius: '50%',
-    // Adjust position to account for the changed size and ensure the dot remains centered
-    // You might want to adjust how zoom affects position if the zooming behavior doesn't look right
-    left: `calc(${x_px}px - ${size / 2}px)`, 
-    top: `calc(${y_px}px - ${size / 2}px)`,
-    transform: 'translate(-50%, -50%)',
+    transform: 'translate(-50%, -50%)', // Centers the dot on (x, y)
   };
 
-  return <div style={dotStyle}></div>;
+  return <div style={dotStyle} />;
 };
 
 export default Dot;
