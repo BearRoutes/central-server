@@ -5,14 +5,16 @@ const mapWidthInPixels = 1791;
 const mapHeightInPixels = 1484;
 
 class Container extends Component {
+  state = {
+    dots: [],
+    selectedFile: null,
+  };
+
   constructor(props) {
     super(props);
-    this.state = {
-      dots: [],
-    };
-    // Binding this context to methods
-    this.addDot = this.addDot.bind(this);
-    this.handleWheel = this.handleWheel.bind(this);
+    // Bind methods
+    this.handleFileSelect = this.handleFileSelect.bind(this);
+    this.handleFileRead = this.handleFileRead.bind(this);
   }
 
   componentDidMount() {
@@ -27,31 +29,63 @@ class Container extends Component {
     container.removeEventListener('wheel', this.handleWheel);
   }
 
-  handleWheel(e) {
-    e.preventDefault();
-    const zoomLevel = this.props.zoomLevel;
-    const setZoomLevel = this.props.setZoomLevel;
-    const newZoomLevel = e.deltaY < 0 ? Math.min(zoomLevel + 0.1, 3) : Math.max(zoomLevel - 0.1, 0.5);
-    setZoomLevel(newZoomLevel);
+  handleFileSelect(event) {
+    if (event.target.files && event.target.files[0]) {
+      this.setState({ selectedFile: event.target.files[0] });
+    } else {
+      console.error('No file was selected.');
+    }
   }
 
-  addDot(x, y, color = 'red') {
-    const newDot = { x, y, color };
-    this.setState(prevState => ({
-      dots: [...prevState.dots, newDot],
-    }));
+  handleFileRead() {
+    const { selectedFile } = this.state;
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target.result;
+        const lines = text.split('\n');
+        const newDots = lines.map((line) => {
+          const [xStr, yStr, color] = line.split(',');
+
+          const x = parseFloat(xStr)*10.91;
+          const y = parseFloat(yStr)*20.24;
+          
+          
+          console.log(x, y)
+          if (!isNaN(x) && !isNaN(y)) {
+            return { x, y: mapHeightInPixels - y, color: color || 'red' }; // Default to red if color is not specified
+          } else {
+            console.error('Invalid format in line:', line);
+            return null;
+          }
+        }).filter(dot => dot); // Remove null values
+
+        this.setState({ dots: newDots });
+      };
+      reader.onerror = () => {
+        console.error('Error reading file.');
+      };
+      reader.readAsText(selectedFile);
+    } else {
+      console.error('No file is selected to read.');
+    }
   }
 
   render() {
-    const { zoomLevel, dots } = this.props;
     return (
+      <div>
+        <input type="file" onChange={this.handleFileSelect} />
+        <button onClick={this.handleFileRead}>Add Dots</button>
         <div className="floor-map-container" style={{ width: `${mapWidthInPixels}px`, height: `${mapHeightInPixels}px`, position: 'relative' }}>
-          {dots.map((dot, index) => (
-            <Dot key={index} x={dot.x} y={dot.y} zoom={zoomLevel} color={dot.color} />
+          <Dot x={100} y={100} color="red" />
+          {this.state.dots.map((dot, index) => (
+            <Dot key={index} x={dot.x} y={dot.y} color={dot.color} />
           ))}
         </div>
-      );
+      </div>
+    );
   }
 }
 
 export default Container;
+
