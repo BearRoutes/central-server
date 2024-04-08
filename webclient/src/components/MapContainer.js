@@ -9,7 +9,7 @@ function getDistance(dot1, dot2) {
 }
 
 function findClosestNeighbors(dots, numNeighbors = 3) {
-  return dots.map(dot => {
+  const pair =  dots.map(dot => {
     // Create a list of all other dots with their distances to the current dot
     let allDotsWithDistances = dots
       .filter(compareDot => compareDot !== dot) // Exclude the current dot
@@ -26,6 +26,8 @@ function findClosestNeighbors(dots, numNeighbors = 3) {
 
     return { dot, neighbors: closestNeighbors };
   });
+  console.log(pair);
+  return pair;
 }
 
 const Lines = ({ dots, numNeighbors }) => {
