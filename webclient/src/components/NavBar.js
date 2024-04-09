@@ -1,41 +1,72 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
 function NavigationBar() {   
 
-return (
-    <Navbar bg="dark" variant="dark" expand="lg" >
-        <Container>
-            <Navbar.Brand href="#home" style={{ fontSize: '30px' }}>BearRoutes</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
+    const [fromRoom, setFromRoom] = useState('');
+    const [toRoom, setToRoom] = useState('');
 
-                    <NavDropdown title="FROM : address 1" id = "dropdown-1">
-                        <NavDropdown.Item href = "#address 1">Room 1</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 2">Room 2</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 3">Room 3</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 4">Room 4</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 5">Room 5</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 6">Room 6</NavDropdown.Item>
-                    </NavDropdown>
+    const handleSelectFrom = (eventKey) => {
+        setFromRoom(eventKey);
+    };
 
-                    <NavDropdown title="TO : address 2" id = "dropdown-1">
-                        <NavDropdown.Item href = "#address 1">Room 1</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 2">Room 2</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 3">Room 3</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 4">Room 4</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 5">Room 5</NavDropdown.Item>
-                        <NavDropdown.Item href = "#address 6">Room 6</NavDropdown.Item>
-                    </NavDropdown>               
+    const handleSelectTo = (eventKey) => {
+        setToRoom(eventKey);
+    };
 
-                    {/* Add more Nav.Link or NavDropdown components as needed */}
-                </Nav>
-            </Navbar.Collapse>
-        </Container>
-    </Navbar>
-);
+    const handleNavItemClick = (event) => {
+        event.preventDefault();
+        // Handle the rest of your logic here, such as setting state
+      };
+
+    const selectedRouteStyle = {
+        fontSize: '20px', // Increase font size
+        marginLeft: '20px', // Move a bit to the left
+        //fontFamily: 'Roboto', // Change the font
+        color: 'white', // Change the font color if needed
+      };
+
+    return (
+        <Navbar bg="dark" variant="dark" expand="lg" >
+            <Container>
+                <Navbar.Brand href="#home" style={{ fontSize: '30px' }}>BearRoutes</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="me-auto">
+                        <Nav.Link onClick={handleNavItemClick} href="#home">Home</Nav.Link>
+
+                        <NavDropdown onClick={handleNavItemClick} title="FROM" id = "dropdown-1" onSelect={handleSelectFrom}>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "Room 2-118">Room 2-118</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-001">Room 2-001</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-003">Room 2-003</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-049">Room 2-049</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-020">Room 2-020</NavDropdown.Item>
+                        </NavDropdown>
+
+                        <NavDropdown onClick={handleNavItemClick} title="TO" id = "dropdown-2" onSelect={handleSelectTo}>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "Room 2-118">Room 2-118</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-001">Room 2-001</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-003">Room 2-003</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-049">Room 2-049</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleNavItemClick} href = "#Room 2-020">Room 2-020</NavDropdown.Item>
+                        </NavDropdown>               
+
+                        {/* Add more Nav.Link or NavDropdown components as needed */}
+                    </Nav>
+                    {/* Display the selected rooms */}
+                    {fromRoom && toRoom && (
+                        <Nav>
+                            <Nav.Item>
+                                <Nav.Link disabled style={selectedRouteStyle}>
+                                    Selected Route: From {fromRoom} To {toRoom}
+                                </Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+                    )}
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
+    );
 }
 
 export default NavigationBar;
