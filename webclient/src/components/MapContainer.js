@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Dot from './Dot';
+import axios from 'axios';
 
 const mapWidthInPixels = 1791;
 const mapHeightInPixels = 1484;
@@ -8,8 +9,6 @@ const mapHeightInPixels = 1484;
 const routeData = {
   "route": ["2-118", "2-117", "2-125", "2-127", "2-132", "AST-2-132", "2-002", "2-001ZZB", "2-001"]
 };
-
-const heatmap = {"heat":{"2-125":66,"2-118":0,"2-117":66,"STR-1":0,"2-002ZZ":3,"ELV-179":19,"2-132":0,"AST-8":0,"2-001":1,"Pedway":2,"2-001ZZA":0,"2-003":23,"2-011":44,"STR-6":4,"STR-2":66,"2-005ZZB":43,"ELV-18X":19,"2-054":66,"2-047":16,"STR-4":23,"2-050":42,"2-052":0,"2-043":1,"2-048":30,"2-042":20,"2-039":20,"2-038":5,"2-037":41,"2-090":0,"2-060C":0,"2-005ZZA":0,"2-060B":0,"2-060A":0,"STR-5":0,"STR-3":1,"2-020":65,"2-016":30,"2-010":36,"2-001ZZD":66,"2-001ZZC":31,"2-001ZZB":9,"2-002":21,"AST-2-132":1,"2-127":44}}
 
 function getDistance(dot1, dot2) {
   return Math.sqrt((dot1.x - dot2.x) ** 2 + (dot1.y - dot2.y) ** 2);
@@ -69,7 +68,23 @@ class Container extends Component {
     }
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    try {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString(); // Convert to ISO format
+
+      const routeResponse = await axios.get('http://localhost:8000/route?start=2-118&end=2-001');
+      const heatResponse = await axios.get(`http://localhost:8000/heat?timestamp=${formattedDate}`);
+      
+      // Update state with fetched data
+      this.setState({
+        // routeDots: routeResponse.data.route.map(name => this.state.dots.find(dot => dot.name === name)).filter(dot => dot),
+        heats: heatResponse.data.heat
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+
     // Adding event listener when the component mounts
     const container = document.querySelector('.floor-map-container');
     container.addEventListener('wheel', this.handleWheel, { passive: false });
@@ -121,8 +136,6 @@ class Container extends Component {
         this.setState({ dots: newDots });
 
         this.setRouteDots(routeNames);
-
-        this.setState({ heats: heatmap.heat})
 
       };
       reader.onerror = () => {
