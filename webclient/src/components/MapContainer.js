@@ -46,6 +46,7 @@ class Container extends Component {
     this.handleDayChange = this.handleDayChange.bind(this);
     this.handleHourChange = this.handleHourChange.bind(this);
     this.updateHeatData = this.updateHeatData.bind(this);
+    this.showCurrentHeatData = this.showCurrentHeatData.bind(this);
   }
 
   handleDayChange(event) {
@@ -83,7 +84,9 @@ class Container extends Component {
       
       // Update state with fetched data
       this.setState({
-        heats: heatResponse.data
+        heats: heatResponse.data,
+        selectedDay: dayOfWeek,
+        selectedHour: hour,
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -133,6 +136,25 @@ class Container extends Component {
     }
   }
 
+  async showCurrentHeatData () {
+    try {
+      const currentDate = new Date();
+      const hour = currentDate.getHours()
+      const dayOfWeek = currentDate.getDay()
+      const month = currentDate.getMonth() + 1
+      const heatResponse = await axios.get(`http://localhost:8000/heat?month=${month}&day=${dayOfWeek}&hour=${hour}`);
+      
+      // Update state with fetched data
+      this.setState({
+        heats: heatResponse.data,
+        selectedDay: dayOfWeek,
+        selectedHour: hour,
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
 
   render() {
     const {showLines, selectedDay, selectedHour} = this.state;
@@ -157,6 +179,7 @@ class Container extends Component {
             ))}
           </select>
           <button onClick={this.updateHeatData}>Update Heat Data</button>
+          <button onClick={this.showCurrentHeatData}>Show Current Heat Data</button>
         </div>
         
         <button onClick={this.handleShowRoute}>
