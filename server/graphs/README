@@ -1,0 +1,19 @@
+To generate data that resembles BLEBeR data and store it to sensor_data.txt:
+    python feed.py
+
+To start processing data for every hour and calculate heat levels:
+    python data_processing.py
+
+To run the server:
+    python -m uvicorn server_route:app
+
+To get route:
+    http://localhost:8000/route?start=2-118&end=2-001
+
+To get heat:
+    http://localhost:8000/heat?timestamp=2024-04-10T15:30:00-06:00
+
+Available heat data in heat json file:
+    Month of April, monday to sunday, 7:00 am to 7:00 pm
+
+
