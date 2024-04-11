@@ -5,17 +5,6 @@ import axios from 'axios';
 const mapWidthInPixels = 1791;
 const mapHeightInPixels = 1484;
 
-
-const routeData = {
-  "route": ["2-118", "2-117", "2-125", "2-127", "2-132", "AST-2-132", "2-002", "2-001ZZB", "2-001"]
-};
-
-function getDistance(dot1, dot2) {
-  return Math.sqrt((dot1.x - dot2.x) ** 2 + (dot1.y - dot2.y) ** 2);
-}
-
-const routeNames = routeData.route;
-
 const Lines = ({ routeDots }) => {
   return (
     <svg style={{ position: 'absolute', left: '-397.5px', bottom: '-155px', width: '100%', height: '100%' }}>
@@ -54,15 +43,19 @@ class Container extends Component {
     this.handleFileRead = this.handleFileRead.bind(this);
   }
 
-  // toggleLines = () => {
-  //   this.setState(prevState => ({ showLines: !prevState.showLines }));
-  // };
-
-  handleShowRoute = () => {
+  handleShowRoute = async () => {
     const { fileRead } = this.state;
-    if (fileRead) {
-      // Assuming routeDots is calculated somewhere after reading the file
-      this.setState((prevState) => ({ showLines: !prevState.showLines }));
+    if (fileRead && this.props.startPoint && this.props.endPoint) {
+      const start = this.props.startPoint.split(' ')[1];
+      const end = this.props.endPoint.split(' ')[1];
+      const url = `http://localhost:8000/route?start=${start}&end=${end}`
+      const routeNames = await axios.get(url);
+      if (routeNames.data?.route.length > 0) {
+        const routeDots = routeNames.data?.route.map(name => this.state.dots.find(dot => dot.name === name)).filter(dot => dot);
+        this.setState({ routeDots });
+        // Assuming routeDots is calculated somewhere after reading the file
+        this.setState((prevState) => ({ showLines: !prevState.showLines }));
+      }
     } else {
       alert('Please add the HeatMap first.');
     }
@@ -72,13 +65,10 @@ class Container extends Component {
     try {
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString(); // Convert to ISO format
-
-      const routeResponse = await axios.get('http://localhost:8000/route?start=2-118&end=2-001');
       const heatResponse = await axios.get(`http://localhost:8000/heat?timestamp=${formattedDate}`);
       
       // Update state with fetched data
       this.setState({
-        // routeDots: routeResponse.data.route.map(name => this.state.dots.find(dot => dot.name === name)).filter(dot => dot),
         heats: heatResponse.data.heat
       });
     } catch (error) {
@@ -95,11 +85,6 @@ class Container extends Component {
     const container = document.querySelector('.floor-map-container');
     container.removeEventListener('wheel', this.handleWheel);
   }
-
-  setRouteDots = (routeNames) => {
-    const routeDots = routeNames.map(name => this.state.dots.find(dot => dot.name === name)).filter(dot => dot);
-    this.setState({ routeDots });
-  };
 
   handleFileSelect(event) {
     if (event.target.files && event.target.files[0]) {
@@ -133,9 +118,7 @@ class Container extends Component {
           }
         }).filter(dot => dot); // Remove null values
 
-        this.setState({ dots: newDots });
-
-        this.setRouteDots(routeNames);
+        this.setState({ dots: newDots })
 
       };
       reader.onerror = () => {
