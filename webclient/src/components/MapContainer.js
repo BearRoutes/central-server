@@ -34,13 +34,26 @@ class Container extends Component {
     fileRead: false,
     routeDots: [],
     showLines: false,
-    heats: {}
+    heats: {},
+    selectedDay: 0,
+    selectedHour: 7
   };
 
   constructor(props) {
     super(props);
     // Bind methods
     this.handleFileSelect = this.handleFileSelect.bind(this);
+    this.handleDayChange = this.handleDayChange.bind(this);
+    this.handleHourChange = this.handleHourChange.bind(this);
+    this.updateHeatData = this.updateHeatData.bind(this);
+  }
+
+  handleDayChange(event) {
+    this.setState({ selectedDay: parseInt(event.target.value) });
+  }
+
+  handleHourChange(event) {
+    this.setState({ selectedHour: parseInt(event.target.value) });
   }
 
   handleShowRoute = async () => {
@@ -63,12 +76,14 @@ class Container extends Component {
   async componentDidMount() {
     try {
       const currentDate = new Date();
-      const formattedDate = currentDate.toISOString(); // Convert to ISO format
-      const heatResponse = await axios.get(`http://localhost:8000/heat?timestamp=${formattedDate}`);
+      const hour = currentDate.getHours()
+      const dayOfWeek = currentDate.getDay()
+      const month = currentDate.getMonth() + 1
+      const heatResponse = await axios.get(`http://localhost:8000/heat?month=${month}&day=${dayOfWeek}&hour=${hour}`);
       
       // Update state with fetched data
       this.setState({
-        heats: heatResponse.data.heat
+        heats: heatResponse.data
       });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -102,12 +117,47 @@ class Container extends Component {
     }
   }
 
+  async updateHeatData() {
+    try {
+      const currentDate = new Date();
+      const month = currentDate.getMonth() + 1
+      const { selectedDay, selectedHour } = this.state;
+      const heatResponse = await axios.get(`http://localhost:8000/heat?month=${month}&day=${selectedDay}&hour=${selectedHour}`);
+      
+      // Update state with fetched data
+      this.setState({
+        heats: heatResponse.data
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
 
   render() {
-    const {showLines} = this.state;
+    const {showLines, selectedDay, selectedHour} = this.state;
     console.log()
     return (
       <div>
+        <div>
+          <label>Select Day:</label>
+          <select value={selectedDay} onChange={this.handleDayChange}>
+            <option value={0}>Sunday</option>
+            <option value={1}>Monday</option>
+            <option value={2}>Tuesday</option>
+            <option value={3}>Wednesday</option>
+            <option value={4}>Thursday</option>
+            <option value={5}>Friday</option>
+            <option value={6}>Saturday</option>
+          </select>
+          <label>Select Hour:</label>
+          <select value={selectedHour} onChange={this.handleHourChange}>
+            {[...Array(13).keys()].map(hour => (
+              <option key={hour} value={hour + 7}>{hour + 7}:00</option>
+            ))}
+          </select>
+          <button onClick={this.updateHeatData}>Update Heat Data</button>
+        </div>
         
         <button onClick={this.handleShowRoute}>
           {showLines ? 'Hide Lines' : 'Show Route'}
