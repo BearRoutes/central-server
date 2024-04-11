@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 
-function NavigationBar() {   
-
-    const [fromRoom, setFromRoom] = useState('');
-    const [toRoom, setToRoom] = useState('');
+function NavigationBar({ setStartPoint, setEndPoint, startPoint, endPoint }) {   
 
     const handleSelectFrom = (eventKey) => {
-        setFromRoom(eventKey);
+        setStartPoint(eventKey)
     };
 
     const handleSelectTo = (eventKey) => {
-        setToRoom(eventKey);
+        setEndPoint(eventKey);
     };
 
     const handleNavItemClick = (event) => {
@@ -54,11 +51,11 @@ function NavigationBar() {
                         {/* Add more Nav.Link or NavDropdown components as needed */}
                     </Nav>
                     {/* Display the selected rooms */}
-                    {fromRoom && toRoom && (
+                    {startPoint && endPoint && (
                         <Nav>
                             <Nav.Item>
                                 <Nav.Link disabled style={selectedRouteStyle}>
-                                    Selected Route: From {fromRoom} To {toRoom}
+                                    Selected Route: From {startPoint} To {endPoint}
                                 </Nav.Link>
                             </Nav.Item>
                         </Nav>
